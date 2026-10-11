@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://ckyro6se7irgx"]
+
+[ext_resource type="Script" uid="uid://dogk0qftcjlct" path="res://scripts/main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://cisvoc7dd5hko" path="res://scenes/enemy.tscn" id="2_h2yge"]
+
+[node name="Main" type="Node2D" unique_id=1468530935]
+script = ExtResource("1_ig7tw")
+
+[node name="Ground" type="Polygon2D" parent="." unique_id=557451743]
+
+[node name="Path" type="Line2D" parent="." unique_id=1361094873]
+
+[node name="Enemy" parent="." unique_id=15578825 instance=ExtResource("2_h2yge")]
+position = Vector2(-20, 100)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1791099738]
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer" unique_id=87446228]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 145.0
+offset_bottom = 43.0
+text = "Vida da base: 10"
+
+[node name="DefeatScreen" type="Control" parent="CanvasLayer" unique_id=1181951671]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="CanvasLayer/DefeatScreen" unique_id=777448183]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.30980393, 0.023529412, 0.07058824, 1)
+
+[node name="Content" type="VBoxContainer" parent="CanvasLayer/DefeatScreen" unique_id=1877675434]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -125.0
+offset_top = -300.0
+offset_right = 125.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="DefeatLabel" type="Label" parent="CanvasLayer/DefeatScreen/Content" unique_id=1660709838]
+custom_minimum_size = Vector2(10, 100)
+layout_mode = 2
+text = "FIM DE JOGO!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="RestartButton" type="Button" parent="CanvasLayer/DefeatScreen/Content" unique_id=673402425]
+layout_mode = 2
+localize_numeral_system = false
+toggle_mode = true
+text = "Jogar Novamente"
