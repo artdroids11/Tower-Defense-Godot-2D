@@ -18,7 +18,6 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, tower_radius, Color(0.145, 0.318, 1.0, 1.0))
 
 func _ready() -> void:
-	position = Vector2(285, 190)
 	main = get_parent()
 	
 func _process(delta: float) -> void:
