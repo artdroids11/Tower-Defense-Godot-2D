@@ -4,3 +4,4 @@
 
 [node name="Tower" type="Node2D" unique_id=663019341]
 script = ExtResource("1_2x682")
+attack_damage = 5

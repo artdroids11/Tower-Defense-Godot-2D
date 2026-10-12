@@ -1,9 +1,11 @@
 extends Node2D
 
-@export var speed: float = 850.0
+@export var speed: float = 1000.0
 var target: Node2D
 var direction: Vector2 = Vector2.ZERO
 var previous_position: Vector2 = Vector2.ZERO
+
+var damage: int = 1
 
 func _draw() -> void:
 	draw_line(Vector2(-12, 0),Vector2(12, 0),Color(1.0, 0.008, 0.016, 1.0),5.0)
@@ -22,6 +24,6 @@ func _process(delta: float) -> void:
 		global_position
 	)
 		
-	if global_position.distance_to(target.global_position) < 25.0:
-		target.take_damage(3)
+	if closest_point.distance_to(target.global_position) < 20.0:
+		target.take_damage(damage)
 		queue_free()

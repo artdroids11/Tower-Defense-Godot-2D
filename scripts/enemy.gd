@@ -8,6 +8,7 @@ var path_points: PackedVector2Array
 var current_point_index: int = 0
 
 var health: int = 3
+var is_dead: bool = false
 
 func _draw():
 	draw_circle(Vector2.ZERO, radius, enemy_color)
@@ -33,10 +34,15 @@ func _process(delta: float) -> void:
 		current_point_index += 1
 		
 func take_damage(amount: int) -> void:
+	if is_dead:
+		return
+	
 	health -= amount
 	print("Vida do inimigo: ", health)
 	
 	if health <= 0:
+		is_dead = true
+		remove_from_group("enemies")
 		get_parent().enemies_alive -= 1
 		queue_free()
 	

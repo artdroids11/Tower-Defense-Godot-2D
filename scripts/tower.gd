@@ -2,19 +2,19 @@ extends Node2D
 
 const PROJECTILE_SCENE = preload("res://scenes/projectiles.tscn")
 
-@export var range: float = 230.0
+@export var attack_range: float = 230.0
 @export var tower_radius: float = 18.0
 
 var main:Node2D
 var enemies_in_range: Array[Node2D] = []
 var target: Node2D = null
 
-var attack_damage: int = 1
-var attack_interval: float = 1.0
-var attack_timer: float = 1.0
+@export var attack_damage: int = 2
+@export var attack_interval: float = 1.0
+var attack_timer: float = 0.0
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, range, Color(0.2, 0.6, 1.0, 0.2))
+	draw_circle(Vector2.ZERO, attack_range, Color(0.2, 0.6, 1.0, 0.2))
 	draw_circle(Vector2.ZERO, tower_radius, Color(0.145, 0.318, 1.0, 1.0))
 
 func _ready() -> void:
@@ -35,7 +35,7 @@ func find_enemies_in_range() -> void:
 		
 		var distance: float = global_position.distance_to(enemy.global_position)
 		
-		if distance <= range:
+		if distance <= attack_range:
 			current_enemies.append(enemy)
 			
 			if not enemies_in_range.has(enemy):
@@ -47,7 +47,7 @@ func find_enemies_in_range() -> void:
 	
 func select_target() -> void:
 	var closest_enemy: Node2D = null
-	var closest_distance: float = range
+	var closest_distance: float = attack_range
 	
 	for enemy in enemies_in_range:
 		if not is_instance_valid(enemy):
@@ -55,7 +55,7 @@ func select_target() -> void:
 			
 		var distance: float = global_position.distance_to(enemy.global_position)
 		
-		if closest_distance == null or distance < closest_distance:
+		if closest_enemy == null or distance < closest_distance:
 			closest_distance = distance
 			closest_enemy = enemy
 			
@@ -79,12 +79,13 @@ func attack(delta:float) -> void:
 			projectile.global_position = global_position
 			projectile.target = target
 			
+			projectile.damage = attack_damage
+			
 			projectile.direction = (target.global_position 
 			- projectile.global_position).normalized()
 			
 			projectile.rotation = projectile.direction.angle()
-		else:
-			("Nenhum alvo no alcance")
+	
 		
 		attack_timer -= attack_interval
-	
+		

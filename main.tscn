@@ -11,6 +11,8 @@ script = ExtResource("1_ig7tw")
 [node name="Path" type="Line2D" parent="." unique_id=1361094873]
 
 [node name="Tower" parent="." unique_id=663019341 instance=ExtResource("2_0xm2m")]
+attack_damage = 1
+attack_interval = 0.25
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1791099738]
 
