@@ -7,6 +7,8 @@ extends Node2D
 var path_points: PackedVector2Array
 var current_point_index: int = 0
 
+var health: int = 3
+
 func _draw():
 	draw_circle(Vector2.ZERO, radius, enemy_color)
 	
@@ -29,3 +31,12 @@ func _process(delta: float) -> void:
 	
 	if global_position.distance_to(target_position) < 2.0:
 		current_point_index += 1
+		
+func take_damage(amount: int) -> void:
+	health -= amount
+	print("Vida do inimigo: ", health)
+	
+	if health <= 0:
+		get_parent().enemies_alive -= 1
+		queue_free()
+	

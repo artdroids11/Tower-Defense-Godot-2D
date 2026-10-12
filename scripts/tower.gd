@@ -7,17 +7,22 @@ var main:Node2D
 var enemies_in_range: Array[Node2D] = []
 var target: Node2D = null
 
+var attack_damage: int = 1
+var attack_interval: float = 1.0
+var attack_timer: float = 1.0
+
 func _draw() -> void:
 	draw_circle(Vector2.ZERO, range, Color(0.2, 0.6, 1.0, 0.2))
-	draw_circle(Vector2.ZERO, tower_radius, Color(0.233, 0.491, 0.899, 1.0))
+	draw_circle(Vector2.ZERO, tower_radius, Color(0.706, 0.0, 0.0, 1.0))
 
 func _ready() -> void:
 	position = Vector2(285, 190)
 	main = get_parent()
 	
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	find_enemies_in_range()
 	select_target()
+	attack(delta)
 
 func find_enemies_in_range() -> void:
 	var current_enemies: Array[Node2D] = []
@@ -59,3 +64,16 @@ func select_target() -> void:
 			print("Alvo selecionado: ", target.name)
 		else:
 			print("Nenhum alvo no alcance")
+
+func attack(delta:float) -> void:
+	attack_timer += delta
+	
+	if attack_timer >= attack_interval:
+		if is_instance_valid(target):
+			print("Atacando o alvo: ", target.name)
+			target.take_damage(attack_damage)
+		else:
+			("Nenhum alvo no alcance")
+		
+		attack_timer -= attack_interval
+	
