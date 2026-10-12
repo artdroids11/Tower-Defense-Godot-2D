@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ckyro6se7irgx"]
 
 [ext_resource type="Script" uid="uid://dogk0qftcjlct" path="res://scripts/main.gd" id="1_ig7tw"]
-[ext_resource type="PackedScene" uid="uid://cisvoc7dd5hko" path="res://scenes/enemy.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://b14k3gjpt0awq" path="res://scenes/tower.tscn" id="2_0xm2m"]
 
 [node name="Main" type="Node2D" unique_id=1468530935]
 script = ExtResource("1_ig7tw")
@@ -10,8 +10,7 @@ script = ExtResource("1_ig7tw")
 
 [node name="Path" type="Line2D" parent="." unique_id=1361094873]
 
-[node name="Enemy" parent="." unique_id=15578825 instance=ExtResource("2_h2yge")]
-position = Vector2(-20, 100)
+[node name="Tower" parent="." unique_id=663019341 instance=ExtResource("2_0xm2m")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1791099738]
 
@@ -20,7 +19,19 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = 145.0
 offset_bottom = 43.0
-text = "Vida da base: 10"
+text = "Vida da base: 100"
+
+[node name="Waves" type="Label" parent="CanvasLayer" unique_id=1629436128]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -55.0
+offset_top = 20.0
+offset_right = -30.0
+offset_bottom = 43.0
+grow_horizontal = 0
+horizontal_alignment = 2
+vertical_alignment = 3
 
 [node name="DefeatScreen" type="Control" parent="CanvasLayer" unique_id=1181951671]
 visible = false

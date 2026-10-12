@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="The Gurizations TD"
+run/main_scene="uid://ckyro6se7irgx"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -19,6 +20,8 @@ config/icon="res://icon.svg"
 window/size/viewport_width=960
 window/size/viewport_height=540
 window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/vsync/vsync_mode=0
 
 [physics]
 

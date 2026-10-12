@@ -2,13 +2,10 @@ extends Node2D
 
 @export var enemy_color: Color = Color.REBECCA_PURPLE
 @export var radius: float = 20.0
-@export var speed: float = 150.0
+@export var speed: float = 200.0
 
 var path_points: PackedVector2Array
 var current_point_index: int = 0
-
-func _ready() -> void:
-	await get_parent()
 
 func _draw():
 	draw_circle(Vector2.ZERO, radius, enemy_color)
@@ -18,6 +15,7 @@ func _process(delta: float) -> void:
 		print("Inimigo chegou ao final da rota.")
 		
 		get_parent().damage_base(1)
+		get_parent().enemies_alive -= 1
 		
 		queue_free()
 		return
@@ -31,5 +29,3 @@ func _process(delta: float) -> void:
 	
 	if global_position.distance_to(target_position) < 2.0:
 		current_point_index += 1
-	
-	

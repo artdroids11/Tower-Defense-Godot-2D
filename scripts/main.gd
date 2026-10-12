@@ -15,16 +15,19 @@ const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 @onready var ground: Polygon2D = $Ground
 @onready var path: Line2D = $Path
 @onready var health_label: Label = $CanvasLayer/HealthLabel
+@onready var waves_label: Label = $CanvasLayer/Waves
 @onready var defeat_screen: Control = $CanvasLayer/DefeatScreen
 @onready var restart_button: Button = $CanvasLayer/DefeatScreen/Content/RestartButton
 
-var base_health: int = 10
+var base_health: int = 100
 
 var current_wave: int = 0
 var enemies_per_wave: int = 5
-var spwan_interval: float = .7
+var spawn_interval: float = .7
 var wave_interval: float = 2.0
 var game_over: bool = false
+var enemies_alive: int = 0
+var total_waves: int = 5
 
 func _ready():
 	ground.polygon = PackedVector2Array([
@@ -50,9 +53,6 @@ func _ready():
 
 	path.width = 54.0
 	path.default_color = Color("806d44ff")
-
-	$Enemy.path_points = path.points
-	$Enemy.current_point_index = 0
 	
 	defeat_screen.hide()
 	restart_button.pressed.connect(_on_restart_button_pressed)
@@ -87,30 +87,46 @@ func spawn_enemy() -> void:
 	enemy.current_point_index = 0
 	enemy.global_position = path.points[0]
 	
+	enemies_alive += 1
+	
 func start_wave() -> void:
 	if game_over:
+		return
+	
+	if current_wave >= total_waves:
+		print("Todas as ondas foram concluídas!")
 		return
 		
 	current_wave += 1
 	print("Iniciando onda: ", current_wave)
+	waves_label.text = str(current_wave) + "/" + str(total_waves)
 	
 	for i in range(enemies_per_wave):
 		if game_over:
 			return
 		
 		spawn_enemy()
-		await get_tree().create_timer(wave_interval).timeout
+		await get_tree().create_timer(spawn_interval).timeout
 		
 	print("Todos os inimigos da onda ", current_wave, " foram enviados.")
 	wait_and_start_next_wave()	
 	
 func wait_and_start_next_wave() -> void:
+	while enemies_alive > 0:
+		if game_over:
+			return
+		await get_tree().create_timer(.5).timeout
+		
+	if game_over:
+		return
+		
 	await get_tree().create_timer(wave_interval).timeout
 	
-	if not game_over:
-		start_wave()
-		
-
+	if game_over:
+		return
 	
+	if current_wave >= total_waves:
+		print("Todas as ondas foram concluídas!")
+		return
 	
-	
+	start_wave()
