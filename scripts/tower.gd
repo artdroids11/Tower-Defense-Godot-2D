@@ -1,6 +1,8 @@
 extends Node2D
 
-@export var range: float = 250.0
+const PROJECTILE_SCENE = preload("res://scenes/projectiles.tscn")
+
+@export var range: float = 230.0
 @export var tower_radius: float = 18.0
 
 var main:Node2D
@@ -13,7 +15,7 @@ var attack_timer: float = 1.0
 
 func _draw() -> void:
 	draw_circle(Vector2.ZERO, range, Color(0.2, 0.6, 1.0, 0.2))
-	draw_circle(Vector2.ZERO, tower_radius, Color(0.706, 0.0, 0.0, 1.0))
+	draw_circle(Vector2.ZERO, tower_radius, Color(0.145, 0.318, 1.0, 1.0))
 
 func _ready() -> void:
 	position = Vector2(285, 190)
@@ -71,7 +73,16 @@ func attack(delta:float) -> void:
 	if attack_timer >= attack_interval:
 		if is_instance_valid(target):
 			print("Atacando o alvo: ", target.name)
-			target.take_damage(attack_damage)
+			var projectile = PROJECTILE_SCENE.instantiate()
+			get_parent().add_child(projectile)
+			
+			projectile.global_position = global_position
+			projectile.target = target
+			
+			projectile.direction = (target.global_position 
+			- projectile.global_position).normalized()
+			
+			projectile.rotation = projectile.direction.angle()
 		else:
 			("Nenhum alvo no alcance")
 		
