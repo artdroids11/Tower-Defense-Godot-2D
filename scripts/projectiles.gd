@@ -24,6 +24,6 @@ func _process(delta: float) -> void:
 		global_position
 	)
 		
-	if closest_point.distance_to(target.global_position) < 20.0:
+	if closest_point.distance_to(target.global_position) < 21.0:
 		target.take_damage(damage)
 		queue_free()

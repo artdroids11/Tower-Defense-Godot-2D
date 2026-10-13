@@ -29,6 +29,8 @@ var game_over: bool = false
 var enemies_alive: int = 0
 var total_waves: int = 5
 
+var selected_tower: Node2D = null
+
 func _ready():
 	ground.polygon = PackedVector2Array([
 		Vector2(0,0),
@@ -130,3 +132,35 @@ func wait_and_start_next_wave() -> void:
 		return
 	
 	start_wave()
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var clicked_position: Vector2 = get_global_mouse_position()
+			var towers = get_tree().get_nodes_in_group("towers")
+			
+			for tower in towers:
+				var tower_position: Vector2 = tower.global_position
+				var tower_rect := Rect2(
+					tower_position - Vector2(18, 18),
+					 Vector2(36, 36)
+					)
+					
+				if tower_rect.has_point(clicked_position):
+					select_tower(tower)
+					return
+					
+			if selected_tower != null:
+				selected_tower.set_selected(false)
+				selected_tower = null
+			
+func select_tower(tower: Node2D) -> void:
+	if selected_tower == tower:
+		selected_tower.set_selected(false)
+		selected_tower = null
+		return
+		
+	if selected_tower != null:
+		selected_tower.set_selected(false)
+		
+	selected_tower = tower
+	selected_tower.set_selected(true)

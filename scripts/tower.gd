@@ -13,12 +13,19 @@ var target: Node2D = null
 @export var attack_interval: float = 1.0
 var attack_timer: float = 0.0
 
+var is_selected: bool = false
+
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, attack_range, Color(0.2, 0.6, 1.0, 0.2))
-	draw_circle(Vector2.ZERO, tower_radius, Color(0.145, 0.318, 1.0, 1.0))
+	if is_selected:
+		draw_circle(Vector2.ZERO, attack_range, Color(0.441, 0.27, 0.12, 0.137))
 
 func _ready() -> void:
 	main = get_parent()
+	set_selected(false)
+	
+func set_selected(value: bool) -> void:
+	is_selected = value
+	queue_redraw()
 	
 func _process(delta: float) -> void:
 	find_enemies_in_range()
