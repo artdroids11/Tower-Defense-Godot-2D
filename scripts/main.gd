@@ -188,17 +188,60 @@ func update_tower_info(tower: Node2D) -> void:
 func position_tower_info(tower: Node2D) -> void:
 	var tower_position: Vector2 = tower.get_global_transform_with_canvas().origin
 	var viewport_size: Vector2 = get_viewport_rect().size
+	var panel_size: Vector2 = tower_info_panel.size
+	var margin: float = 45.0
 	
-	var panel_position: Vector2 = tower_position + Vector2(30, -tower_info_panel.size.y - 20)
+	var candidates: Array[Vector2] = [
+		tower_position + Vector2(margin, -panel_size.y / 2.0),
+		tower_position + Vector2(-panel_size.x - margin, -panel_size.y / 2.0),
+		tower_position + Vector2(-panel_size.x / 2.0, -panel_size.y - margin),
+		tower_position + Vector2(-panel_size.x / 2.0, margin),
+		tower_position + Vector2(margin, -panel_size.y - margin),
+		tower_position + Vector2(-panel_size.x - margin, -panel_size.y - margin),
+		tower_position + Vector2(margin, margin),
+		tower_position + Vector2(-panel_size.x - margin, margin)
+	]
 	
-	if panel_position.x + tower_position.x > viewport_size.x:
-		panel_position.x = tower_position.x - tower_info_panel.size.x - 30
+	var best_position: Vector2 = Vector2.ZERO
+	var fewest_conflicts: int = 2147483647
+	
+	for candidate in candidates:
+		var candidate_position: Vector2 = Vector2(
+			clampf(candidate.x, 0.0, maxf(0.0, viewport_size.x - panel_size.x)),
+			clampf(candidate.y, 0.0, maxf(0.0, viewport_size.y - panel_size.y))
+		)
 		
-	if panel_position.y < 0:
-		panel_position.y = tower_position.y + 30
+		var panel_rect: Rect2 = Rect2(candidate_position, panel_size)
+		var conflicts: int = count_path_conflicts(panel_rect)
 		
-	panel_position.x = clampf(panel_position.x, 0, viewport_size.x - tower_info_panel.size.x)
-	panel_position.y = clampf(panel_position.y, 0, viewport_size.y - tower_info_panel.size.y)
+		if conflicts == 0:
+			best_position = candidate_position
+			fewest_conflicts = 0
+			break
+			
+		if conflicts < fewest_conflicts:
+			fewest_conflicts = conflicts
+			best_position = candidate_position
+			
+	tower_info_panel.position = best_position
 	
-	tower_info_panel.position = panel_position	
+func count_path_conflicts(panel_rect: Rect2) -> int:
+	var conflicts: int = 0
+	var points: PackedVector2Array = path.points
+	var path_transform: Transform2D = path.get_global_transform_with_canvas()
+	var safe_rect: Rect2 = panel_rect.grow(path.width / 2.0)
 	
+	for i in range(points.size() - 1):
+		var start: Vector2 = path_transform * points[i]
+		var finish: Vector2 = path_transform * points[i + 1]
+		var distance: float = start.distance_to(finish)
+		var steps: int = maxi(1, int(ceil(distance / 8.0)))
+		
+		for step in range(steps + 1):
+			var point: Vector2 = start.lerp(finish, float(step) / steps)
+			
+			if safe_rect.has_point(point):
+				conflicts += 1
+				
+	return conflicts
+		 

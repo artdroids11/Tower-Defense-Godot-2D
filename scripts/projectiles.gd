@@ -5,7 +5,7 @@ var target: Node2D
 var direction: Vector2 = Vector2.ZERO
 var previous_position: Vector2 = Vector2.ZERO
 
-var damage: int = 1
+var damage: float = 0.5
 
 func _draw() -> void:
 	draw_line(Vector2(-12, 0),Vector2(12, 0),Color(1.0, 0.008, 0.016, 1.0),5.0)

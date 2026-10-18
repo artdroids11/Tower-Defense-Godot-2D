@@ -9,7 +9,7 @@ var main:Node2D
 var enemies_in_range: Array[Node2D] = []
 var target: Node2D = null
 
-@export var attack_damage: int = 2
+@export var attack_damage: float = 2.0
 @export var attack_interval: float = 1.0
 var attack_timer: float = 0.0
 
