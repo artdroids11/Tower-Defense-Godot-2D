@@ -19,6 +19,12 @@ const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 @onready var defeat_screen: Control = $CanvasLayer/DefeatScreen
 @onready var restart_button: Button = $CanvasLayer/DefeatScreen/Content/RestartButton
 
+@onready var tower_info_panel: PanelContainer = $CanvasLayer/TowerInfoPanel
+@onready var tower_name_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/TowerNameLabel
+@onready var damage_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/DamageLabel
+@onready var range_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/RangeLabel
+@onready var interval_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/IntervalLabel
+
 var base_health: int = 100
 
 var current_wave: int = 0
@@ -57,6 +63,7 @@ func _ready():
 	path.default_color = Color("806d44ff")
 	
 	defeat_screen.hide()
+	tower_info_panel.hide()
 	restart_button.pressed.connect(_on_restart_button_pressed)
 	
 	start_wave()
@@ -152,11 +159,13 @@ func _input(event: InputEvent) -> void:
 			if selected_tower != null:
 				selected_tower.set_selected(false)
 				selected_tower = null
+				tower_info_panel.hide()
 			
 func select_tower(tower: Node2D) -> void:
 	if selected_tower == tower:
 		selected_tower.set_selected(false)
 		selected_tower = null
+		tower_info_panel.hide()
 		return
 		
 	if selected_tower != null:
@@ -164,3 +173,32 @@ func select_tower(tower: Node2D) -> void:
 		
 	selected_tower = tower
 	selected_tower.set_selected(true)
+	update_tower_info(selected_tower)
+
+func update_tower_info(tower: Node2D) -> void:
+	tower_name_label.text = tower.name
+	damage_label.text = "Dano: " + str(tower.attack_damage)
+	range_label.text = "Alcance: " + str(tower.attack_range)
+	interval_label.text = "Intervalo: " + str(tower.attack_interval) + " s"
+	
+	tower_info_panel.show()
+	tower_info_panel.reset_size()
+	position_tower_info(tower)
+	
+func position_tower_info(tower: Node2D) -> void:
+	var tower_position: Vector2 = tower.get_global_transform_with_canvas().origin
+	var viewport_size: Vector2 = get_viewport_rect().size
+	
+	var panel_position: Vector2 = tower_position + Vector2(30, -tower_info_panel.size.y - 20)
+	
+	if panel_position.x + tower_position.x > viewport_size.x:
+		panel_position.x = tower_position.x - tower_info_panel.size.x - 30
+		
+	if panel_position.y < 0:
+		panel_position.y = tower_position.y + 30
+		
+	panel_position.x = clampf(panel_position.x, 0, viewport_size.x - tower_info_panel.size.x)
+	panel_position.y = clampf(panel_position.y, 0, viewport_size.y - tower_info_panel.size.y)
+	
+	tower_info_panel.position = panel_position	
+	

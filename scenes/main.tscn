@@ -10,13 +10,13 @@ script = ExtResource("1_0wfyh")
 
 [node name="Path" type="Line2D" parent="." unique_id=1361094873]
 
-[node name="Tower" parent="." unique_id=663019341 instance=ExtResource("2_sugp2")]
+[node name="Sniper" parent="." unique_id=663019341 instance=ExtResource("2_sugp2")]
 position = Vector2(285, 190)
 attack_range = 180.0
 attack_damage = 2
 attack_interval = 0.25
 
-[node name="Tower2" parent="." unique_id=710837690 instance=ExtResource("2_sugp2")]
+[node name="Tanque" parent="." unique_id=710837690 instance=ExtResource("2_sugp2")]
 position = Vector2(90, 190)
 attack_range = 260.0
 attack_damage = 8
@@ -42,6 +42,47 @@ offset_bottom = 43.0
 grow_horizontal = 0
 horizontal_alignment = 2
 vertical_alignment = 3
+
+[node name="TowerInfoPanel" type="PanelContainer" parent="CanvasLayer" unique_id=1321914256]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -140.0
+offset_right = -141.0
+offset_bottom = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="InfoContent" type="VBoxContainer" parent="CanvasLayer/TowerInfoPanel" unique_id=287426310]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TowerNameLabel" type="Label" parent="CanvasLayer/TowerInfoPanel/InfoContent" unique_id=638691144]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Torre Selecionada"
+
+[node name="DamageLabel" type="Label" parent="CanvasLayer/TowerInfoPanel/InfoContent" unique_id=706992335]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Dano: --"
+
+[node name="RangeLabel" type="Label" parent="CanvasLayer/TowerInfoPanel/InfoContent" unique_id=1289806120]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Alcance: --"
+
+[node name="IntervalLabel" type="Label" parent="CanvasLayer/TowerInfoPanel/InfoContent" unique_id=149018084]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Intervalo: --"
 
 [node name="DefeatScreen" type="Control" parent="CanvasLayer" unique_id=1181951671]
 visible = false
