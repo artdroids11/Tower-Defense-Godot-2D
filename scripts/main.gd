@@ -179,7 +179,7 @@ func update_tower_info(tower: Node2D) -> void:
 	tower_name_label.text = tower.name
 	damage_label.text = "Dano: " + str(tower.attack_damage)
 	range_label.text = "Alcance: " + str(tower.attack_range)
-	interval_label.text = "Intervalo: " + str(tower.attack_interval) + " s"
+	interval_label.text = "Intervalo: " + str(tower.attack_interval) + "s"
 	
 	tower_info_panel.show()
 	tower_info_panel.reset_size()
@@ -189,7 +189,11 @@ func position_tower_info(tower: Node2D) -> void:
 	var tower_position: Vector2 = tower.get_global_transform_with_canvas().origin
 	var viewport_size: Vector2 = get_viewport_rect().size
 	var panel_size: Vector2 = tower_info_panel.size
-	var margin: float = 45.0
+	var tower_rect: Rect2 = Rect2(
+		tower_position - Vector2(18, 18),
+		Vector2(36, 36)
+	)
+	var margin: float = 30.0
 	
 	var candidates: Array[Vector2] = [
 		tower_position + Vector2(margin, -panel_size.y / 2.0),
@@ -213,6 +217,9 @@ func position_tower_info(tower: Node2D) -> void:
 		
 		var panel_rect: Rect2 = Rect2(candidate_position, panel_size)
 		var conflicts: int = count_path_conflicts(panel_rect)
+		
+		if panel_rect.intersects(tower_rect):
+			conflicts += 1000000
 		
 		if conflicts == 0:
 			best_position = candidate_position

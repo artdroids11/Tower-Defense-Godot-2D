@@ -10,7 +10,7 @@ script = ExtResource("1_0wfyh")
 
 [node name="Path" type="Line2D" parent="." unique_id=1361094873]
 
-[node name="Sniper" parent="." unique_id=663019341 instance=ExtResource("2_sugp2")]
+[node name="Torre Rápida" parent="." unique_id=663019341 instance=ExtResource("2_sugp2")]
 position = Vector2(285, 190)
 attack_range = 180.0
 attack_damage = 0.9
@@ -19,8 +19,8 @@ attack_interval = 0.25
 [node name="Tanque" parent="." unique_id=710837690 instance=ExtResource("2_sugp2")]
 position = Vector2(90, 190)
 attack_range = 260.0
-attack_damage = 8.0
-attack_interval = 2.0
+attack_damage = 2.0
+attack_interval = 1.5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1791099738]
 
@@ -44,7 +44,7 @@ horizontal_alignment = 2
 vertical_alignment = 3
 
 [node name="TowerInfoPanel" type="PanelContainer" parent="CanvasLayer" unique_id=1321914256]
-visible = false
+custom_minimum_size = Vector2(140, 110)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
