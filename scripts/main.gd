@@ -17,6 +17,7 @@ const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 @onready var health_label: Label = $CanvasLayer/HealthLabel
 @onready var waves_label: Label = $CanvasLayer/Waves
 @onready var defeat_screen: Control = $CanvasLayer/DefeatScreen
+
 @onready var restart_button: Button = $CanvasLayer/DefeatScreen/Content/RestartButton
 
 @onready var tower_info_panel: PanelContainer = $CanvasLayer/TowerInfoPanel
@@ -24,6 +25,8 @@ const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 @onready var damage_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/DamageLabel
 @onready var range_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/RangeLabel
 @onready var interval_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/IntervalLabel
+
+@onready var upgrade_button: Button = $CanvasLayer/TowerInfoPanel/InfoContent/UpgradeButton
 
 var base_health: int = 100
 
@@ -64,9 +67,12 @@ func _ready():
 	
 	defeat_screen.hide()
 	tower_info_panel.hide()
+	upgrade_button.hide()
 	restart_button.pressed.connect(_on_restart_button_pressed)
+	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
 	
 	start_wave()
+	
 	
 func damage_base(amount: int) -> void:
 	if base_health <= 0:
@@ -139,7 +145,7 @@ func wait_and_start_next_wave() -> void:
 		return
 	
 	start_wave()
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var clicked_position: Vector2 = get_global_mouse_position()
@@ -160,12 +166,14 @@ func _input(event: InputEvent) -> void:
 				selected_tower.set_selected(false)
 				selected_tower = null
 				tower_info_panel.hide()
+				upgrade_button.hide()
 			
 func select_tower(tower: Node2D) -> void:
 	if selected_tower == tower:
 		selected_tower.set_selected(false)
 		selected_tower = null
 		tower_info_panel.hide()
+		upgrade_button.hide()
 		return
 		
 	if selected_tower != null:
@@ -182,7 +190,9 @@ func update_tower_info(tower: Node2D) -> void:
 	interval_label.text = "Intervalo: " + str(tower.attack_interval) + "s"
 	
 	tower_info_panel.show()
+	upgrade_button.show()
 	tower_info_panel.reset_size()
+	update_upgrade_button(tower)
 	position_tower_info(tower)
 	
 func position_tower_info(tower: Node2D) -> void:
@@ -252,3 +262,19 @@ func count_path_conflicts(panel_rect: Rect2) -> int:
 				
 	return conflicts
 		 
+func _on_upgrade_button_pressed() -> void:
+	
+	if selected_tower == null:
+		return
+	
+	selected_tower.upgrade_tower()
+	update_tower_info(selected_tower)
+	
+func update_upgrade_button(tower: Node2D) -> void:
+	if tower.upgrade_level >= 2:
+		upgrade_button.disabled = true
+		upgrade_button.text = "Nível máximo"
+	else:
+		upgrade_button.disabled = false
+		upgrade_button.text = "Melhorar torre"
+		

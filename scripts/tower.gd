@@ -13,6 +13,9 @@ var target: Node2D = null
 @export var attack_interval: float = 1.0
 var attack_timer: float = 0.0
 
+var upgrade_level: int = 1
+@onready var tower_visual: Polygon2D = $TowerVisual
+
 var is_selected: bool = false
 
 func _draw() -> void:
@@ -95,3 +98,17 @@ func attack(delta:float) -> void:
 		
 		attack_timer -= attack_interval
 		
+		
+func upgrade_tower() ->  void:
+	if upgrade_level >= 2:
+		return
+		
+	upgrade_level += 1
+	attack_damage += 0.75
+	
+	tower_visual.color = Color(1.0, 0.75, 0.2)
+	
+	print("Torre melhorada para o nível ", upgrade_level)
+	print("Novo dano: ", attack_damage)
+	
+	
