@@ -28,7 +28,12 @@ const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 
 @onready var upgrade_button: Button = $CanvasLayer/TowerInfoPanel/InfoContent/UpgradeButton
 
+@onready var money_label: Label = $CanvasLayer/MoneyLabel
+
 var base_health: int = 100
+
+const UPGRADE_COST: int = 25
+var money: int = 100
 
 var current_wave: int = 0
 var enemies_per_wave: int = 5
@@ -72,7 +77,7 @@ func _ready():
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
 	
 	start_wave()
-	
+	update_money_label()
 	
 func damage_base(amount: int) -> void:
 	if base_health <= 0:
@@ -263,11 +268,21 @@ func count_path_conflicts(panel_rect: Rect2) -> int:
 	return conflicts
 		 
 func _on_upgrade_button_pressed() -> void:
-	
 	if selected_tower == null:
 		return
+		
+	if selected_tower.upgrade_level >= 2:
+		return
+	
+	if money < UPGRADE_COST:
+		print("Saldo insuficiente!")
+		return
+		
+	money -= UPGRADE_COST
 	
 	selected_tower.upgrade_tower()
+	
+	update_money_label()
 	update_tower_info(selected_tower)
 	
 func update_upgrade_button(tower: Node2D) -> void:
@@ -278,3 +293,12 @@ func update_upgrade_button(tower: Node2D) -> void:
 		upgrade_button.disabled = false
 		upgrade_button.text = "Melhorar torre"
 		
+func update_money_label() -> void:
+	money_label.text = "Dinheiro: " + str(money)
+	
+func add_money(amount: int) -> void:
+	money += amount
+	update_money_label()
+	
+	print("Dinheiro recebido: ", amount)
+	print("Saldo atual: ", money)

@@ -43,6 +43,19 @@ grow_horizontal = 0
 horizontal_alignment = 2
 vertical_alignment = 3
 
+[node name="MoneyLabel" type="Label" parent="CanvasLayer" unique_id=2120773391]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 20.0
+offset_right = -97.0
+offset_bottom = 43.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "Dinheiro: 100"
+
 [node name="TowerInfoPanel" type="PanelContainer" parent="CanvasLayer" unique_id=1321914256]
 custom_minimum_size = Vector2(140, 110)
 anchors_preset = 3
