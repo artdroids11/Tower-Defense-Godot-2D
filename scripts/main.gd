@@ -18,8 +18,6 @@ const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 @onready var waves_label: Label = $CanvasLayer/Waves
 @onready var defeat_screen: Control = $CanvasLayer/DefeatScreen
 
-@onready var restart_button: Button = $CanvasLayer/DefeatScreen/Content/RestartButton
-
 @onready var tower_info_panel: PanelContainer = $CanvasLayer/TowerInfoPanel
 @onready var tower_name_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/TowerNameLabel
 @onready var damage_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/DamageLabel
@@ -27,6 +25,9 @@ const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 @onready var interval_label: Label = $CanvasLayer/TowerInfoPanel/InfoContent/IntervalLabel
 
 @onready var upgrade_button: Button = $CanvasLayer/TowerInfoPanel/InfoContent/UpgradeButton
+@onready var restart_button: Button = $CanvasLayer/DefeatScreen/Content/RestartButton
+@onready var play_button: Button = $CanvasLayer/PlayButton
+@onready var build_button: Button = $CanvasLayer/BuildSystem
 
 @onready var money_label: Label = $CanvasLayer/MoneyLabel
 
@@ -38,11 +39,12 @@ var money: int = 100
 var current_wave: int = 0
 var enemies_per_wave: int = 5
 var spawn_interval: float = .7
-var wave_interval: float = 2.0
+var wave_interval: float = 1.5
 var game_over: bool = false
 var enemies_alive: int = 0
 var total_waves: int = 5
 
+var is_building: bool = false
 var selected_tower: Node2D = null
 
 func _ready():
@@ -75,9 +77,30 @@ func _ready():
 	upgrade_button.hide()
 	restart_button.pressed.connect(_on_restart_button_pressed)
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
+	play_button.pressed.connect(_on_play_button_pressed)
+	build_button.pressed.connect(_on_build_button_pressed)
 	
-	start_wave()
+	#start_wave()
 	update_money_label()
+
+func _on_play_button_pressed() -> void:
+	if game_over:
+		return
+		
+	play_button.hide()
+	start_wave()
+	
+func _on_build_button_pressed() -> void:
+	if game_over:
+		return
+		
+	is_building = not is_building
+	
+	if is_building:
+		print("Você entrou no modo de construção")
+	else:
+		print("Modo de construção cancelado!")
+		
 	
 func damage_base(amount: int) -> void:
 	if base_health <= 0:
@@ -149,7 +172,9 @@ func wait_and_start_next_wave() -> void:
 		print("Todas as ondas foram concluídas!")
 		return
 	
-	start_wave()
+	play_button.text = "Próxima onda"
+	play_button.show()
+	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

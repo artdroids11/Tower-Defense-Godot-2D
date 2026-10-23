@@ -40,6 +40,7 @@ offset_top = 20.0
 offset_right = -30.0
 offset_bottom = 43.0
 grow_horizontal = 0
+text = "0/5"
 horizontal_alignment = 2
 vertical_alignment = 3
 
@@ -55,6 +56,37 @@ grow_horizontal = 0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 text = "Dinheiro: 100"
+
+[node name="PlayButton" type="Button" parent="CanvasLayer" unique_id=1852788074]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -35.0
+offset_right = -43.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "PLAY"
+
+[node name="BuildSystem" type="Button" parent="CanvasLayer" unique_id=444625470]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = 235.0
+offset_right = -356.0
+offset_bottom = 266.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(62, 0)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Construir torre"
 
 [node name="TowerInfoPanel" type="PanelContainer" parent="CanvasLayer" unique_id=1321914256]
 custom_minimum_size = Vector2(140, 110)
